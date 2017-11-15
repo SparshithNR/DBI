@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="./style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <title>Document</title>
+</head>
+<body ng-app="app" ng-controller="app-cntrl">
+    <div class="banner">
+        <div class="content-flex">
+            <h1>
+                Movie Search
+            </h1>
+            <div>
+                <img src="http://crue.usc.edu/visionevents/admin/USC_Gold.png" alt="usc logo" class="img-responsive title-image">
+            </div>
+        </div>
+    </div>
+    <div class="cotainer-fluid">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Query Builder
+                </div>
+                <div class="panel-body">
+                    List movies 
+                    <select name="" id="" ng-model="what" class="form-control" ng-change="changeInWhat()">
+                        <option value="{{$index}}" ng-repeat="option in queryList">{{option}}</option>
+                    </select>
+                    <div class="checkbox" ng-repeat="option in optionList">
+                        <label><input type="checkbox" ng-model="option.isSelected">{{option.name}}</label>
+                        <input type="text" ng-model="option.value" ng-disabled="!option.isSelected" class="form-control"/>
+                    </div>
+                    <input type="submit" value="Go!" class="btn btn-success" ng-show="!!what" ng-click="startSearch()">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Result
+                </div>
+                <div class="panel-body">
+                    <ul  class="nav nav-tabs" ng-show="query">
+                        <li class="active">
+                            <a  href="#query" data-toggle="tab">Query</a>
+                        </li>
+                        <li>
+                            <a  href="#result" data-toggle="tab">Result</a>
+                        </li>
+                    </ul>
+                    <div ng-show="query" class="tab-content">
+                        <div class="tab-pane fade in active" id="query">
+                            <pre ng-show="query">{{query}}
+                            </pre>
+                        </div>
+                        <div class="tab-pane fade" id="result">
+                            <table class="table" ng-if="data.length">
+                                <thead>
+                                    <tr>
+                                        <th ng-repeat="title in headers">
+                                            {{title}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="row in data">
+                                        <td ng-repeat="title in headers">
+                                            <span ng-if="title == 'movieTitle'">
+                                                <a ng-href="{{row['movie'].value}}" target="_blank">{{row[title].value}}</a>
+                                            </span>
+                                            <span ng-if="title != 'movieTitle'">
+                                                {{row[title].value}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div ng-if="!data.length" class="alert alert-info">
+                                    <strong> No Data available. Try with someother set of inputs.</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-hide="query">
+                        Please build your query.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./script.js"></script>
+</html>
