@@ -1,5 +1,5 @@
 # DBI
-CSCI586: Class homework Movie search semantic web assignment front end
+CSCI586: Class Project Movie search semantic web assignment front end
 
 Python script used to crawl and exract required data from IMDB
 Later using python script different datasets are merged and single dataset is obtained.
