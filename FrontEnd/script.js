@@ -21,7 +21,12 @@ app.controller("app-cntrl", function($scope, $http) {
         name: "Occupation",
         value: "",
         isSelected: false
-     }];
+     }, {
+        name: "Other",
+        value: "",
+        isSelected: false
+     }
+    ];
     $scope.directedActedBy = [{
         name:"PersonName",
         value: "",
@@ -70,7 +75,18 @@ app.controller("app-cntrl", function($scope, $http) {
         $scope.query += `
 WHERE {`;
         if (this.what == "0") {
-            $scope.query +=`
+            if($scope.optionList[5].isSelected) {
+                $scope.query +=`
+            $movie towl:movieTitle $movieTitle;
+            towl:rating $rating;
+            towl:keyword1 $keyword1;
+            towl:keyword2 $keyword2;
+            towl:keyword3 $keyword3;
+            towl:keyword4 $keyword4;
+            towl:keyword5 $keyword5.
+            `;
+            } else {
+                $scope.query +=`
             $movie towl:movieTitle $movieTitle;
             towl:rating $rating.
             $person towl:basedOnPerson $movie;
@@ -80,15 +96,16 @@ WHERE {`;
             towl:birthYear $year;
             towl:occupation $occupation.
             `;
+            }
         } else if(this.what == "1"){
             $scope.query +=`
-            $actor towl:actedBy $movie;
-            towl:personName $name;
+            $person towl:personName $name;
             towl:birthCountry $country;
             towl:birthCity $city;
             towl:birthYear $year;
             towl:occupation $occupation.
-            $movie towl:movieTitle $movieTitle;
+            $movie towl:directedBy $person;
+            towl:movieTitle $movieTitle;
             towl:rating $rating.
             `;
         } else {
@@ -119,7 +136,10 @@ WHERE {`;
                         break;
                     case "Occupation": $scope.query +=  `
             FILTER(REGEX(str($occupation), "${element.value.trim()}", "i"))`;
-                        break;    
+                        break; 
+                    case "Other": $scope.query +=  `
+            FILTER(contains($keyword1,"${element.value.trim()}") || contains($keyword2,"${element.value.trim()}") || contains($keyword3,"${element.value.trim()}") || contains($keyword4,"${element.value.trim()}") || contains($keyword5,"${element.value.trim()}"))`;
+                        break;
                 }
             }
         }, this);
@@ -143,5 +163,22 @@ WHERE {`;
                 $scope.headers.splice(index, 1);
             }
         });
+    }
+    $scope.changeInCheckBox = function(option) {
+        if(option.name == "Other" && option.isSelected) {
+            $scope.optionList.forEach(function(optionF) {
+                if(optionF.name != "Other") {
+                    optionF.isSelected = false;
+                    option.value = "";
+                }
+            });
+        } else if (option.name == "PersonName" && option.isSelected) {
+            $scope.optionList.forEach(function(optionF) {
+                if(optionF.name != "PersonName") {
+                    optionF.isSelected = false;
+                    optionF.value = "";
+                }
+            });
+        }
     }
 })

@@ -33,7 +33,7 @@
                         <option value="{{$index}}" ng-repeat="option in queryList">{{option}}</option>
                     </select>
                     <div class="checkbox" ng-repeat="option in optionList">
-                        <label><input type="checkbox" ng-model="option.isSelected">{{option.name}}</label>
+                        <label><input type="checkbox" ng-model="option.isSelected" ng-change="changeInCheckBox(option)">{{option.name}}</label>
                         <input type="text" ng-model="option.value" ng-disabled="!option.isSelected" class="form-control"/>
                     </div>
                     <input type="submit" value="Go!" class="btn btn-success" ng-show="!!what" ng-click="startSearch()">
@@ -60,7 +60,7 @@
                             </pre>
                         </div>
                         <div class="tab-pane fade" id="result">
-                            <table class="table" ng-if="data.length">
+                            <table class="table table-hover table-bordered" ng-if="data.length">
                                 <thead>
                                     <tr>
                                         <th ng-repeat="title in headers">
